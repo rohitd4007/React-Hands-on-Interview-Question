@@ -1,6 +1,6 @@
 # React-Hands-on-Interview-Question
 
-## Create a simple counter component with increment and decrement buttons.
+## 1. Create a simple counter component with increment and decrement buttons.
 
 ### Solution -
 
@@ -35,7 +35,7 @@ export default function App() {
 ```
 
 
-## Create a Todo List app with Add, Delete, and Mark Completed features.
+## 2. Create a Todo List app with Add, Delete, and Mark Completed features.
 
 ### Solution -
 
@@ -43,7 +43,7 @@ export default function App() {
 
 ```
 
-## Create a Modal component using React Portal.
+## 3. Create a Modal component using React Portal.
 
 ### Solution -
 
@@ -51,7 +51,7 @@ export default function App() {
 
 ```
 
-## Build a custom hook useDebounce that delays updating a value.
+## 4. Build a custom hook useDebounce that delays updating a value.
 
 ### Solution -
 
@@ -59,7 +59,7 @@ export default function App() {
 
 ```
 
-## Build a simple Tabs component (Switch between tab contents).
+## 5. Build a simple Tabs component (Switch between tab contents).
 
 ### Solution -
 
@@ -67,7 +67,7 @@ export default function App() {
 
 ```
 
-## Implement a Search component that fetches and filters list items as you type.
+## 6. Implement a Search component that fetches and filters list items as you type.
 
 ### Solution -
 
@@ -75,7 +75,7 @@ export default function App() {
 
 ```
 
-## Create a Dropdown component using only React hooks.
+## 7. Create a Dropdown component using only React hooks.
 
 ### Solution -
 
@@ -83,7 +83,7 @@ export default function App() {
 
 ```
 
-## Implement a Dark Mode toggle using Context API.
+## 8. Implement a Dark Mode toggle using Context API.
 
 ### Solution -
 
@@ -91,7 +91,7 @@ export default function App() {
 
 ```
 
-## Build a reusable Accordion component.
+## 9. Build a reusable Accordion component.
 
 ### Solution -
 
@@ -99,7 +99,7 @@ export default function App() {
 
 ```
 
-## Create a Form with multiple inputs and validate them (name, email, password) in React.
+## 10. Create a Form with multiple inputs and validate them (name, email, password) in React.
 
 ### Solution -
 
