@@ -205,6 +205,21 @@ export default function App() {
 ### Solution -
 
 ```
+const useDebounce = (value, delay = 500) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+};
 
 ```
 
@@ -213,6 +228,37 @@ export default function App() {
 ### Solution -
 
 ```
+import { useState } from "react";
+import "./styles.css";
+
+export default function App() {
+  const [tab, setTab] = useState(0);
+
+  const handlTabChange = (id) => {
+    setTab(id);
+  };
+
+  const tabContent = [
+    "This is content of Tab 1",
+    "Here is Tab 2 content",
+    "Welcome to Tab 3",
+    "Final content from Tab 4"
+  ];
+
+  return (
+    <div className="App">
+      <div style={{ display: "flex", gap: "10px", marginBottom: "1rem" }}>
+        <button onClick={() => handlTabChange(0)}>Tab 1</button>
+        <button onClick={() => handlTabChange(1)}>Tab 2</button>
+        <button onClick={() => handlTabChange(2)}>Tab 3</button>
+        <button onClick={() => handlTabChange(3)}>Tab 4</button>
+      </div>
+      <div style={{ padding: "1rem", border: "1px solid #ccc" }}>
+        {tabContent[tab]}
+      </div>
+    </div>
+  );
+}
 
 ```
 
@@ -221,6 +267,43 @@ export default function App() {
 ### Solution -
 
 ```
+import { useState, useEffect } from "react";
+
+export default function App() {
+  const listItems = [
+    { name: "Mango", id: 1 },
+    { name: "Banana", id: 2 },
+    { name: "Peru", id: 3 },
+    { name: "Keshar", id: 4 },
+    { name: "Pineapple", id: 5 },
+  ];
+
+  const [text, setText] = useState("");
+  const [displayText, setDisplayText] = useState([]);
+
+  useEffect(() => {
+    const filteredList = listItems.filter((item) =>
+      item.name.toLowerCase().startsWith(text.toLowerCase())
+    );
+    setDisplayText(filteredList);
+  }, [text]);
+
+  return (
+    <div className="App">
+      <input
+        placeholder="Search fruits..."
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        style={{ padding: "8px", width: "200px" }}
+      />
+      {displayText.length > 0 ? (
+        displayText.map((item) => <div key={item.id}>{item.name}</div>)
+      ) : (
+        <div>No results found</div>
+      )}
+    </div>
+  );
+}
 
 ```
 
@@ -235,8 +318,89 @@ export default function App() {
 ## 8. Implement a Dark Mode toggle using Context API.
 
 ### Solution -
+* Folder Structure
+```
+src/
+├── App.js
+├── styles.css
+├── toggleContext.js
+├── ToggleProvider.js
+├── index.js
 
 ```
+* 1. Create Context
+```
+// toggleContext.js
+import { createContext } from "react";
+
+// This will provide { darkMode, toggleDarkMode }
+const ToggleContext = createContext();
+
+export default ToggleContext;
+
+```
+* 2. Create Provider Component
+```
+// ToggleProvider.js
+import { useState } from "react";
+import ToggleContext from "./toggleContext";
+
+const ToggleProvider = ({ children }) => {
+  const [darkMode, setDarkMode] = useState(false);
+
+  const toggleDarkMode = () => setDarkMode((prev) => !prev);
+
+  return (
+    <ToggleContext.Provider value={{ darkMode, toggleDarkMode }}>
+      {children}
+    </ToggleContext.Provider>
+  );
+};
+
+export default ToggleProvider;
+
+```
+* 3. use Provider in index.js
+
+```
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App";
+import ToggleProvider from "./ToggleProvider";
+
+const root = createRoot(document.getElementById("root"));
+
+root.render(
+  <StrictMode>
+    <ToggleProvider>
+      <App />
+    </ToggleProvider>
+  </StrictMode>
+);
+
+```
+
+* 4. Use Context in App
+
+```
+// App.js
+import { useContext } from "react";
+import ToggleContext from "./toggleContext";
+import "./styles.css";
+
+export default function App() {
+  const { darkMode, toggleDarkMode } = useContext(ToggleContext);
+
+  return (
+    <div className={`App ${darkMode ? "isDark" : ""}`}>
+      <label>
+        <input type="checkbox" checked={darkMode} onChange={toggleDarkMode} />
+        Dark Mode
+      </label>
+      <h1>This is App component</h1>
+    </div>
+  );
+}
 
 ```
 
