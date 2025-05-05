@@ -312,9 +312,90 @@ export default function App() {
 ### Solution -
 
 ```
+// Dropdown.js
+import { useState, useRef, useEffect } from "react";
+
+const Dropdown = ({ options, selected, onSelect }) => {
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const handleOutsideClick = (e) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      setOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
+
+  return (
+    <div ref={dropdownRef} style={{ position: "relative", width: "200px" }}>
+      <div
+        onClick={() => setOpen((prev) => !prev)}
+        style={{ border: "1px solid black", padding: "10px", cursor: "pointer" }}
+      >
+        {selected || "Select an option"}
+      </div>
+      {open && (
+        <ul
+          style={{
+            position: "absolute",
+            border: "1px solid black",
+            width: "100%",
+            listStyle: "none",
+            padding: 0,
+            margin: 0,
+            background: "white",
+            zIndex: 10,
+          }}
+        >
+          {options.map((option, i) => (
+            <li
+              key={i}
+              style={{ padding: "10px", cursor: "pointer" }}
+              onClick={() => {
+                onSelect(option);
+                setOpen(false);
+              }}
+            >
+              {option}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
+
+export default Dropdown;
 
 ```
+How to use it?
 
+```
+// App.js
+import { useState } from "react";
+import Dropdown from "./Dropdown";
+
+export default function App() {
+  const [selected, setSelected] = useState(null);
+
+  return (
+    <div className="App">
+      <h2>Dropdown</h2>
+      <Dropdown
+        options={["Mango", "Apple", "Banana"]}
+        selected={selected}
+        onSelect={setSelected}
+      />
+      <p>Selected: {selected}</p>
+    </div>
+  );
+}
+
+```
 ## 8. Implement a Dark Mode toggle using Context API.
 
 ### Solution -
@@ -409,6 +490,62 @@ export default function App() {
 ### Solution -
 
 ```
+// Accordion.js
+import { useState } from "react";
+
+const Accordion = ({ items }) => {
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  const handleClick = (index) => {
+    setActiveIndex((prev) => (prev === index ? null : index));
+  };
+
+  return (
+    <div style={{ width: "400px", margin: "auto" }}>
+      {items.map((item, i) => (
+        <div key={i}>
+          <div
+            onClick={() => handleClick(i)}
+            style={{
+              padding: "10px",
+              background: "#f0f0f0",
+              cursor: "pointer",
+              borderBottom: "1px solid gray",
+            }}
+          >
+            {item.title}
+          </div>
+          {activeIndex === i && (
+            <div style={{ padding: "10px", background: "#fff" }}>{item.content}</div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default Accordion;
+
+```
+How to use Accordian Component?
+```
+// App.js
+import Accordion from "./Accordion";
+
+const items = [
+  { title: "What is React?", content: "A JavaScript library for building UI." },
+  { title: "Why use React?", content: "It’s flexible, fast, and declarative." },
+  { title: "How to use React?", content: "By creating components!" },
+];
+
+export default function App() {
+  return (
+    <div className="App">
+      <h2>Accordion</h2>
+      <Accordion items={items} />
+    </div>
+  );
+}
 
 ```
 
@@ -417,5 +554,62 @@ export default function App() {
 ### Solution -
 
 ```
+import { useState } from "react";
+
+export default function App() {
+  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    const errs = {};
+
+    if (!formData.name.trim()) errs.name = "Name is required.";
+    if (!formData.email.includes("@")) errs.email = "Invalid email.";
+    if (formData.password.length < 6) errs.password = "Password too short.";
+
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validate()) {
+      alert("Form submitted successfully!");
+      setFormData({ name: "", email: "", password: "" });
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  return (
+    <div className="App">
+      <h2>Validated Form</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          Name: <input name="name" value={formData.name} onChange={handleChange} />
+          <div style={{ color: "red" }}>{errors.name}</div>
+        </div>
+        <div>
+          Email: <input name="email" value={formData.email} onChange={handleChange} />
+          <div style={{ color: "red" }}>{errors.email}</div>
+        </div>
+        <div>
+          Password:{" "}
+          <input
+            name="password"
+            type="password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+          <div style={{ color: "red" }}>{errors.password}</div>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  );
+}
 
 ```
